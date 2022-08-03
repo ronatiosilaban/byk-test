@@ -11,12 +11,12 @@ export default function ListComponent() {
 
     const [hasMore, sethasMore] = useState(true);
 
-    const [page, setpage] = useState(2);
+    const [page, setpage] = useState(1);
 
     useEffect(() => {
         const getComments = async () => {
             const res = await fetch(
-                `https://api.thecatapi.com/v1/breeds?limit=10&age=1`
+                `https://api.thecatapi.com/v1/breeds?limit=10&page=0`
                 // For json server use url below
                 // `http://localhost:3004/comments?_page=1&_limit=20`
             );
@@ -43,8 +43,8 @@ export default function ListComponent() {
         if (commentsFormServer.length === 0 || commentsFormServer.length < 10) {
 
             sethasMore(false);
-            setpage(page + 1);
         }
+        setpage(page + 1);
     };
     const [selected, setSelected] = useState(null)
     const Toggle = (i) => {
@@ -63,10 +63,10 @@ export default function ListComponent() {
                 dataLength={items.length} //This is important field to render the next data
                 next={fetchData}
                 hasMore={hasMore}
-                loader={<h4>Loading...</h4>}
+                loader={<h4></h4>}
                 endMessage={
                     <p style={{ textAlign: 'center' }}>
-                        <b>Yay! You have seen it all</b>
+                        <b>'Yay! You have seen it all'</b>
                     </p>
                 }
 
@@ -74,13 +74,19 @@ export default function ListComponent() {
             >
                 <div className='display'>
                     <div className='height'>
-                        <form className='input'
-                        >
-                            <input
-                                name="serch"
-                                type={Text} />
-                            <button className='button'>Serch</button>
-                        </form>
+                        <div className='nav'>
+                            <div className='right'>
+                                <h1>List Cats</h1>
+                            </div>
+                            <form className='input'
+                            >
+
+                                <input
+                                    name="serch"
+                                    type={Text} />
+                                <button className='button'>Serch</button>
+                            </form>
+                        </div>
 
                         {
                             items?.map((item, i) => (
@@ -94,7 +100,9 @@ export default function ListComponent() {
                                         </div>
                                         <div className={selected == i ? 'content.show' : 'content'}>
                                             <div className='detail'>
-                                                <img className='image' src={item.image.url} />
+                                                {item?.image?.url !== undefined && (
+                                                    <img className='image' src={item.image.url} />
+                                                )}
                                                 <div >
                                                     <p className='details'>Name : {item.name}</p>
                                                     <p >Description : {item.description}</p>

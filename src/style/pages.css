@@ -84,8 +84,17 @@ td {
     display: flex;
     padding-top: 10px;
     margin-bottom: 50px;
-    justify-content: right;
+    display: flex;
     padding-right: 50px;
+    justify-content: right;
+
+}
+
+.right h1 {
+    color: #CEAB93;
+    padding-left: 30px;
+    display: flex;
+    justify-content: right;
 
 }
 
