@@ -12,6 +12,10 @@ export default function ListComponent() {
     const [hasMore, sethasMore] = useState(true);
 
     const [page, setpage] = useState(1);
+    const [form, setForm] = useState({
+        serch: ''
+    });
+
 
     useEffect(() => {
         const getComments = async () => {
@@ -22,10 +26,20 @@ export default function ListComponent() {
             );
             const data = await res.json();
             setItems(data);
+            // setIsSerch(false)
         };
 
         getComments();
     }, []);
+
+    // useEffect(() => {
+    //     const getComments = async () => {
+
+    //         // setIsSerch(false)
+    //     };
+
+    //     getComments();
+    // }, [value]);
 
     const fetchComments = async () => {
         const res = await fetch(
@@ -54,6 +68,27 @@ export default function ListComponent() {
         setSelected(i)
     }
 
+
+    const handleChange = (e) => {
+        setForm({
+            ...form,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const handleSubmit = useMutation(async (e) => {
+        e.preventDefault()
+        const res = await fetch(
+            `https://api.thecatapi.com/v1/breeds/search?q=${form.serch}`
+            // For json server use url below
+            // `http://localhost:3004/comments?_page=1&_limit=20`
+        );
+        const data = await res.json();
+        setItems(data);
+    });
+
+
+
     console.log(items);
 
     return (
@@ -79,9 +114,11 @@ export default function ListComponent() {
                                 <h1>List Cats</h1>
                             </div>
                             <form className='input'
+                                onSubmit={(e) => handleSubmit.mutate(e)}
                             >
 
                                 <input
+                                    onChange={handleChange}
                                     name="serch"
                                     type={Text} />
                                 <button className='button'>Serch</button>
